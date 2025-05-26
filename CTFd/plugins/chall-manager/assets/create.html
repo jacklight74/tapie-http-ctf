@@ -1,0 +1,130 @@
+{% extends "admin/challenges/create.html" %}
+
+{% block header %}
+<div class="alert alert-secondary" role="alert">
+	IaC challenges are special challenge that allows the Player to deploy his personnal challenges Instance.
+	Challmakers provides the Scenario, which is the IaC Pulumi package to be execute by Chall-Manager.
+	This type is based on dynamic challenge type.
+</div>
+{% endblock %}
+
+{% block value %}
+<!-- Chall-manager specifics -->
+<div class="form-group">
+	<label for="value">Sharing<br>
+		<small class="form-text text-muted">
+			<span>If enabled, the instance will be shared for all Users/Teams.
+				It is disabled by default.</span>
+		</small>
+	</label>
+	<select id="select-shared" data-test-id="shared-selector-id" class="custom-select" name="shared">
+		<option value=true>Enabled</option>
+		<option value=false selected>Disabled</option>
+	</select>
+</div>
+
+<div class="form-group">
+	<label for="value">Destroy on flag<br>
+		<small class="form-text text-muted">
+			<span>If enabled, the instance will be destroyed when the player flags the challenge.
+				It is disabled by default.</span>
+		</small>
+	</label>
+	<select id="select-dof" data-test-id="destroy-on-flag-selector-id" class="custom-select" name="destroy_on_flag">
+		<option value=true>Enabled</option>
+		<option value=false selected>Disabled</option>
+	</select>
+</div>
+
+
+<div class="form-group">
+	<label for="value">Mana Cost<br>
+		<small class="form-text text-muted">
+			This is how many points the challenge will cost to User to start it.
+		</small>
+	</label>
+	<input type="number" data-test-id="mana-create-id" class="form-control" name="mana_cost" placeholder="Enter Mana value">
+</div>
+
+<div id="cm-mode-until" class="form-group">
+	<label for="value">Until<br>
+		<small class="form-text text-muted">
+			Until: Define a timestamp where all the instances will be detroyed (e.g 2024-07-10 15:00)
+		</small>
+	</label>
+	<input type="datetime-local" id="until-input-local" data-test-id="until-create-id" class="form-control">
+	<input type="hidden" id="until-input-utc" class="form-control" name="until">
+</div>
+
+<div id="cm-mode-timeout" class="form-group">
+	<label for="value">Timeout<br>
+		<small class="form-text text-muted">
+			Timeout: Define a timeout that the instance will be destroyed by the janitor (e.g 600s for 10 min)
+		</small>
+	</label>
+	<input type="number" id="timeout-input" data-test-id="timeout-create-id" class="form-control" name="timeout">
+</div>
+
+<div class="form-group">
+	<label for="value">Scenario archive<br>
+		<small class="form-text text-muted">
+			This is the IaC Archives
+		</small>
+	</label>
+	<input type="file" class="form-control" id="scenario" data-test-id="scenario-create-id" name="scenario" accept=".zip" required>
+	<input type="hidden" id="scenario_id" class="form-control" name="scenario_id">
+</div>
+<!-- Chall-manager specifics -->
+
+<div class="form-group">
+	<label for="value">Initial Value<br>
+		<small class="form-text text-muted">
+			This is how many points the challenge is worth initially.
+		</small>
+	</label>
+	<input type="number" class="form-control" name="initial" placeholder="Enter value" required>
+</div>
+
+<div class="form-group">
+	<label for="value">Decay Function<br>
+		<small class="form-text text-muted">
+			<span>How the dynamic value will be calculated based on the Decay value</span>
+			<ul>
+				<li>Linear: Calculated as <code>Initial - (Decay * SolveCount)</code></li>
+				<li>Logarithmic: Calculated as <code>(((Minimum - Initial) / (Decay^2)) * (SolveCount^2)) + Initial</code></li>
+			</ul>
+		</small>
+	</label>
+	<select name="function" class="custom-select">
+		<option value="linear">Linear</option>
+		<option value="logarithmic">Logarithmic</option>
+	</select>
+</div>
+
+<div class="form-group">
+	<label for="value">Decay<br>
+		<small class="form-text text-muted">
+			<span>The decay value is used differently depending on the above Decay Function</span>
+			<ul>
+				<li>Linear: The amount of points deducted per solve. Equal deduction per solve.</li>
+				<li>Logarithmic: The amount of solves before the challenge reaches its minimum value. Earlier solves will lose less
+					points. Later solves will lose more points</li>
+			</ul>
+		</small>
+	</label>
+	<input type="number" class="form-control" name="decay" min="1" placeholder="Enter Decay value" required>
+</div>
+
+<div class="form-group">
+	<label for="value">Minimum Value<br>
+		<small class="form-text text-muted">
+			This is the lowest that the challenge can be worth
+		</small>
+	</label>
+	<input type="number" class="form-control" name="minimum" placeholder="Enter minimum value" required>
+</div>
+{% endblock %}
+
+{% block type %}
+<input type="hidden" value="dynamic_iac" name="type" id="chaltype">
+{% endblock %}

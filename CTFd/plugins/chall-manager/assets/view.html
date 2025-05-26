@@ -1,0 +1,74 @@
+{% extends "challenge.html" %}
+
+{% block description %}
+{{ challenge.html }}
+    <div class="row text-center pb-3">
+        <div id="whale-panel" style="width: 100%;">
+            <div id="cm-panel-loading" class="card" style="width: 100%;">
+                <h5 class="card-title">Instance Info</h5>
+                    <h6 id="cm-panel-mana-cost" class="card-subtitle mb-2 text-muted">
+                        Loading...
+                    </h6>
+            </div>
+
+            {% if not challenge.shared %}
+            <div id="whale-panel-stopped" class="card" style="width: 100%; display: none;">
+                <div class="card-body">
+                    <h5 class="card-title">Instance Info</h5>
+                    {% if challenge.mana_cost > 0 %}
+                    <div class="cm-panel-mana-cost-div">
+                        <h6 id="cm-panel-mana-cost" class="card-subtitle mb-2 text-muted">
+                            Mana Cost :  <span id="cm-challenge-mana-cost" data-test-id="cm-challenge-mana-cost">{{ challenge.mana_cost }}</span> (remaining: <span id="cm-challenge-mana-remaining" data-test-id="cm-challenge-mana-remaining">computing...</span>)
+                        </h6>
+                    </div>
+
+                    {% endif %}
+                    <button class="btn btn-primary card-link" style="background-color:#479abf;" id="whale-button-boot" type="button" data-test-id="cm-button-boot"
+                        onclick="CTFd._internal.challenge.boot()">Launch the challenge</button>
+                </div>
+            </div>
+            {% endif %}
+            <div id="whale-panel-started" type="hidden" class="card" style="width: 100%;display: none;">
+                <div class="card-body">
+                    <h5 class="card-title">Instance Info</h5>
+                    {% if challenge.mana_cost > 0 and not challenge.shared %}
+                    <div class="cm-panel-mana-cost-div">
+                        <h6 id="cm-panel-mana-cost" class="card-subtitle mb-2 text-muted">
+                            Mana Cost :  <span id="cm-challenge-mana-cost">{{ challenge.mana_cost }}</span>
+                        </h6>
+                    </div>
+                    {% endif %}
+                    <h6 id="cm-panel-until" class="card-subtitle mb-2 text-muted">
+                        Remaining Time: <span id="whale-challenge-count-down" data-test-id="cm-challenge-count-down"></span>s
+                    </h6>
+                    <p id="whale-challenge-user-access" class="card-text"></p>
+                    {% if not challenge.shared %}
+                    {% if challenge.timeout != "" %}
+                    <button type="button" class="btn btn-success card-link" style="background-color:#ebb850; border-color:#000000" id="whale-button-renew" data-test-id="cm-button-renew"
+                            onclick="CTFd._internal.challenge.renew()">
+                        Renew
+                    </button>
+                    {% endif %}
+                    
+                    <button type="button" class="btn btn-success card-link" style="background-color:#479abf; border-color:#000000" id="whale-button-restart" data-test-id="cm-button-restart"
+                            onclick="CTFd._internal.challenge.restart()"> 
+                        Restart
+                    </button>
+
+                    <button type="button" class="btn btn-danger card-link" style="background-color:#b43c2c; border-color:#000000" id="whale-button-destroy" data-test-id="cm-button-destroy"
+                            onclick="CTFd._internal.challenge.destroy()">
+                        Destroy
+                    </button>  
+                    {% endif %}                  
+
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <code><span id="whale-challenge-lan-domain" data-test-id="cm-connectionInfo-id"></span></code>&nbsp;
+
+    
+{% endblock %}
+
